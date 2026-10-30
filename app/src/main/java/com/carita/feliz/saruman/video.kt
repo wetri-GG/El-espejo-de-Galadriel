@@ -27,7 +27,7 @@ class video : AppCompatActivity() {
             useWideViewPort = true
             mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             mediaPlaybackRequiresUserGesture = false
-            cacheMode = WebSettings.LOAD_NO_CACHE // Evita el error net::ERR_CACHE_MISS
+            cacheMode = WebSettings.LOAD_DEFAULT // Evita el error net::ERR_CACHE_MISS
         }
 
         webView.webViewClient = WebViewClient()
@@ -78,6 +78,16 @@ class video : AppCompatActivity() {
 
         // Carga los datos multimedia asegurando el dominio base de YouTube
         webView.loadDataWithBaseURL("https://www.youtube.com", iframeHtml, "text/html", "utf-8", null)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        webView.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        webView.onResume()
     }
 
     override fun onDestroy() {
