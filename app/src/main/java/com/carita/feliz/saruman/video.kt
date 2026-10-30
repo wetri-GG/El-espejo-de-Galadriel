@@ -3,11 +3,12 @@ package com.carita.feliz.saruman
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 
-class VideoActivity : AppCompatActivity() {
+class video : AppCompatActivity() {
 
     private lateinit var webView: WebView
 
@@ -18,42 +19,67 @@ class VideoActivity : AppCompatActivity() {
 
         webView = findViewById(R.id.webViewPalantir)
 
-        // 1. Configuraciones críticas para evitar que el vídeo salte fuera de la App
+        // Configuraciones esenciales del WebView
+        webView.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            loadWithOverviewMode = true
+            useWideViewPort = true
+            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+            mediaPlaybackRequiresUserGesture = false
+            cacheMode = WebSettings.LOAD_NO_CACHE // Evita el error net::ERR_CACHE_MISS
+        }
+
         webView.webViewClient = WebViewClient()
         webView.webChromeClient = WebChromeClient()
 
-        // 2. Habilitación de JavaScript (Imprescindible para el reproductor de YouTube)
-        webView.settings.javaScriptEnabled = true
-        webView.settings.domStorageEnabled = true // Permite almacenar configuraciones locales del reproductor
-        webView.settings.loadWithOverviewMode = true
-        webView.settings.useWideViewPort = true
-
-        // 3. ID extraído de la URL proporcionada (R4qfx3ZMSB8)
         val videoId = "R4qfx3ZMSB8"
 
-        // 4. Código HTML con el Iframe oficial de YouTube encapsulado y adaptado al 100% de la vista
+        // HTML limpio con la variable delimitada por llaves (${videoId}) para evitar errores
         val iframeHtml = """
+            <!DOCTYPE html>
             <html>
             <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <style>
-                    body { margin: 0; padding: 0; background-color: #000000; }
-                    .video-container { position: relative; width: 100%; height: 100%; }
-                    iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+                    body, html {
+                        margin: 0;
+                        padding: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: #000000;
+                        overflow: hidden;
+                    }
+                    .video-container {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                    }
+                    iframe {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        border: 0;
+                    }
                 </style>
             </head>
             <body>
                 <div class="video-container">
-                    <iframe src="https://youtube.com" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
                 </div>
             </body>
             </html>
         """.trimIndent()
 
-        // 5. Carga de los datos multimedia en el motor del WebView
+        // Carga los datos multimedia asegurando el dominio base de YouTube
         webView.loadDataWithBaseURL("https://www.youtube.com", iframeHtml, "text/html", "utf-8", null)
     }
 
-    // Liberamos memoria al salir para frenar procesos en segundo plano
     override fun onDestroy() {
         webView.stopLoading()
         webView.destroy()

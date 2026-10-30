@@ -25,6 +25,7 @@
             android:name=".video"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-    </application>
 
+    </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

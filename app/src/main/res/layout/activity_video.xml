@@ -35,8 +35,8 @@
 
     <WebView
         android:id="@+id/webViewPalantir"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_width="360dp"
+        android:layout_height="283dp"
         android:layout_marginStart="176dp"
         android:layout_marginTop="177dp"
         android:layout_marginEnd="176dp"
@@ -44,8 +44,10 @@
         android:background="#000000"
         app2:layout_constraintBottom_toBottomOf="parent"
         app2:layout_constraintEnd_toEndOf="parent"
+        app2:layout_constraintHorizontal_bias="0.501"
         app2:layout_constraintStart_toStartOf="parent"
         app2:layout_constraintTop_toTopOf="parent"
+        app2:layout_constraintVertical_bias="0.0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
